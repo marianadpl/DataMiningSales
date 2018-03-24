@@ -18,7 +18,18 @@ head(SalesPred)
 #SalesPred = merge(SalesPred, Shops)
 #SalesPred
 
+#Criando um frame com as 10 primeiras linhas para facilitar a codificacao
+#e a visualizacao dos dados
+frame <- data.frame(head(SalesPred,10))
 
+#for iterando as colunas e linhas do data.frame
+for(r in 1:ncol(frame)){
+  for(j in 1:ncol(frame)){
+    #criando uma nova coluna "Sum_Item" no data.frame para armazenar o resultado da 
+    #multiplicacao do campo item_price * item_cnt_day
+    frame["Sum_Item"] <- (frame[5] * frame[6])
+  }
+}
 
 cor(SalesPred$date_block_num, SalesPred$item_cnt_day)
 

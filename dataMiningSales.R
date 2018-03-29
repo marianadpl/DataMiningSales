@@ -3,6 +3,8 @@ SalesPred <- read.csv(file, sep=",",header = T)
 head(SalesPred)
 ##############
 
+SalesPred <- read.csv("sales_train_v2.csv", sep=",",header = T)
+
 #Merging Dataset
 
 #Sales <- read.csv( "sales_train_v2.csv", sep=",", header=T)
@@ -31,13 +33,25 @@ for(r in 1:ncol(frame)){
   }
 }
 
-cor(SalesPred$date_block_num, SalesPred$item_cnt_day)
+frame["Sum_Item"]
 
-Model <- lm(date_block_num ~ item_cnt_day, data=SalesPred)
-Model
+for(r in 1:ncol(SalesPred)){
+  for(j in 1:ncol(SalesPred)){
+    Sum_Item <- (SalesPred[5] * Sales[6])
+  }
+}
 
-shapiro.test(SalesPred$item_cnt_day)
+Sum_Item
 
-boxplot(SalesPred$item_cnt_day)
+cor(SalesPred$date_block_num,Sum_Item)
 
-#Criar variavel que multiplica numero de itens vendidos por preço
+
+frame2<-data.frame(SalesPred$date_block_num, Sum_Item)
+
+myts <-ts(frame2, start=0, end=33, frequency=12) 
+
+myts
+
+plot(myts)
+
+

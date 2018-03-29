@@ -1,42 +1,54 @@
+library('ggplot2')
+library('forecast')
+
 file <- 'C:/Users/Ronaldo Martins/Documents/University/Data_Web_Mining/CA_2_Data/sales_train_v2.csv'
 SalesPred <- read.csv(file, sep=",",header = T)
-head(SalesPred)
+head(SalesPred,10)
 ##############
 
-#Merging Dataset
+#removing the minus values from dataset
+df <- SalesPred[which(SalesPred$item_cnt_day !=-1),]
+head(df,20)
+#converting field date to type date
+df$date =as.Date(df$date, "%d.%m.%Y")
 
-#Sales <- read.csv( "sales_train_v2.csv", sep=",", header=T)
+#creating a column Total that receives (item_price * item_cnt_day)
+df['Sum_Item'] <-df$item_price*df$item_cnt_day
 
-#Item <- read.csv( "items.csv", sep=",", header=T)
+cor(df$date_block_num,df$Sum_Item)
 
-#ItemCat <- read.csv( "item_categories.csv", sep=",", header=T)
+frame2<-data.frame(df$date, df$Sum_Item)
 
-#Shops <- read.csv( "shops.csv", sep=",", header=T)
-
-#SalesPred = merge(Sales, Item)
-#SalesPred = merge(SalesPred, ItemCat)
-#SalesPred = merge(SalesPred, Shops)
-#SalesPred
-#Criando um frame com as 10 primeiras linhas para facilitar a codificacao
-#e a visualizacao dos dados
-frame <- data.frame(head(SalesPred,10))
-
-#for iterando as colunas e linhas do data.frame
-for(r in 1:ncol(frame)){
-  for(j in 1:ncol(frame)){
-    #criando uma nova coluna "Sum_Item" no data.frame para armazenar o resultado da 
-    #multiplicacao do campo item_price * item_cnt_day
-    frame["Sum_Item"] <- (frame[5] * frame[6])
-  }
-}
-
-cor(SalesPred$date_block_num, SalesPred$item_cnt_day)
-
-Model <- lm(date_block_num ~ item_cnt_day, data=SalesPred)
-Model
+correlation <-lm(df$date_block_num ~ df$Sum_Item)
+correlation
+myts <-ts(frame2, start=0, end=33, frequency=12) 
 
 shapiro.test(frame$item_cnt_day)
 
 boxplot(frame$item_cnt_day)
 
 #Criar variavel que multiplica numero de itens vendidos por preço
+myts
+summary(correlation)
+plot(myts)
+length(SalesPred$date)
+
+####ARIMA
+##pegando o item a ser forecasted 
+newTotal <- diff(SalesPred$Sum_Item, 4)
+fit_data <- arima(newTotal, order = c(1,0,0))
+
+#forecasting
+fit_data_ar <- forecast(fit_data, h = 10)
+fit_data_ar
+plot(forecast(fit_data_ar, h = 10), include = 10)
+summary(fit_data_ar)
+
+
+
+
+
+
+
+
+

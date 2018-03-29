@@ -17,7 +17,6 @@ head(SalesPred)
 #SalesPred = merge(SalesPred, ItemCat)
 #SalesPred = merge(SalesPred, Shops)
 #SalesPred
-
 #Criando um frame com as 10 primeiras linhas para facilitar a codificacao
 #e a visualizacao dos dados
 frame <- data.frame(head(SalesPred,10))
@@ -36,8 +35,8 @@ cor(SalesPred$date_block_num, SalesPred$item_cnt_day)
 Model <- lm(date_block_num ~ item_cnt_day, data=SalesPred)
 Model
 
-shapiro.test(SalesPred$item_cnt_day)
+shapiro.test(frame$item_cnt_day)
 
-boxplot(SalesPred$item_cnt_day)
+boxplot(frame$item_cnt_day)
 
 #Criar variavel que multiplica numero de itens vendidos por preço
